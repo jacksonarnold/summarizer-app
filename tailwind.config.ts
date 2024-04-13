@@ -6,6 +6,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
@@ -18,9 +19,27 @@ const config: Config = {
   },
   plugins: [
     nextui({
-      addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
-      defaultTheme: "light", // default theme from the themes object
-      defaultExtendTheme: "light", // default theme to extend on custom themes
+      prefix: "nextui",
+      addCommonColors: false,
+      defaultTheme: "dark",
+      defaultExtendTheme: "dark",
+      layout: {},
+      themes: {
+        light: {
+          layout: {},
+          colors: {
+            primary: "#4652C0",
+            secondary: "#9DA2FF",
+          },
+        },
+        dark: {
+          layout: {},
+          colors: {
+            primary: "#4652C0",
+            secondary: "#9DA2FF",
+          },
+        },
+      },
     }),
   ]};
 export default config;

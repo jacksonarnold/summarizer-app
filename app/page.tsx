@@ -1,17 +1,17 @@
 import {auth, signIn, signOut} from "@/auth";
 import React from "react";
-import {Button} from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 
 function SignIn() {
     return (
         <form
             action={async () => {
                 "use server";
-                await signIn("google");
+                await signIn("google", { callbackUrl: "/middleware-example" });
             }}
         >
             <p>You are not logged in</p>
-            <Button className="mt-10 bg-blue-500" type="submit">Sign in with Google</Button>
+            <Button className="mt-10" type="submit" color="primary">Sign in with Google</Button>
         </form>
     );
 }
@@ -25,7 +25,7 @@ function SignOut({children}: { children: React.ReactNode }) {
             }}
         >
             <p>{children}</p>
-            <Button className="mt-10" type="submit">Sign out</Button>
+            <Button className="mt-10" type="submit" color="primary">Sign out</Button>
         </form>
     );
 }
