@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils"
-import { ExternalLink } from "lucide-react"
+import {cn} from "@/lib/utils"
+import {ExternalLink} from "lucide-react"
 import Link from "next/link"
 import React from "react";
 
@@ -36,7 +36,7 @@ const CustomLink = ({
             {...rest}
         >
             <span>{children}</span>
-            <ExternalLink className="inline-block ml-0.5 w-4 h-4" />
+            <ExternalLink className="inline-block ml-0.5 w-4 h-4"/>
         </Link>
     )
 }

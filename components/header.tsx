@@ -1,18 +1,18 @@
 import React from "react";
 import {auth} from "@/auth";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, User} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, User} from "@nextui-org/react";
 import {AcmeLogo} from "./ui/AcmeLogo"
 import {SignIn, SignOut} from "@/components/auth-components";
 
 export default async function Header() {
     let session = await auth();
-    let user = session?.user?.email;
+    let userEmail = session?.user?.email;
     const profileImageUrl = session?.user?.image;
 
     return (
         <Navbar>
             <NavbarBrand>
-                <AcmeLogo />
+                <AcmeLogo/>
                 <p className="font-bold text-inherit">ASSISTANT</p>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-10" justify="center">
@@ -41,20 +41,20 @@ export default async function Header() {
                 {/*        Sign Up*/}
                 {/*    </Button>*/}
                 {/*</NavbarItem>*/}
-                {user ?
+                {userEmail ?
                     <NavbarItem>
                         <User
-                            name="Jane Doe"
-                            description="Product Designer"
+                            name={session?.user?.name}
+                            description="Account"
                             avatarProps={{
-                                src: profileImageUrl ? profileImageUrl : "https://i.pravatar.cc/150?u=a04258114e29026702d"
+                                src: profileImageUrl ? profileImageUrl : undefined,
                             }}
                         />
                     </NavbarItem>
                     : <div></div>
                 }
                 <NavbarItem>
-                    {user ? <SignOut/> : <SignIn/>}
+                    {userEmail ? <SignOut/> : <SignIn/>}
                 </NavbarItem>
             </NavbarContent>
         </Navbar>
