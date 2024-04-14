@@ -1,28 +1,36 @@
-"use server";
+"use client";
 import {Button} from "@nextui-org/button";
-import React from "react";
+import React, {useRef} from "react";
 
 export async function FileUpload() {
+    const hiddenFileInput = useRef<HTMLInputElement>(null);
+
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) return;
         console.log(e.target.files);
     }
 
     function handleClick() {
-        console.log("clicked");
+        if (hiddenFileInput && hiddenFileInput.current) {
+            hiddenFileInput.current.click();
+        }
     }
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <div className="text-center space-y-2 mb-4">
-                <p className="text-gray-500 md:mx-auto dark:text-gray-400">
+        <div className="flex-col items-center justify-center text-center">
+            <div className=" space-y-2 mb-4">
+                <span className="text-gray-500 md:mx-auto dark:text-gray-400">
                     Upload a file to generate a summary of its contents.
-                </p>
+                </span>
             </div>
-            <div className="flex items-center justify-center mt-2 ml-5">
-                <input type="file" id="file" />
+            <div className="mt-2">
+                <input style={{display: 'none'}}
+                       id="file_input" type="file"
+                       ref={hiddenFileInput}
+                />
+                <Button onClick={handleClick}>Upload File</Button>
             </div>
-            <Button className="mt-10" color="primary" >
+            <Button className="mt-10" color="primary">
                 Generate Summary
             </Button>
         </div>

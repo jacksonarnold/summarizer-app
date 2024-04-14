@@ -9,7 +9,7 @@ export default async function Page() {
 
     return (
         <section>
-            <h1 className="text-3xl font-bold mb-20">Summarize Document</h1>
+            <h1 className="text-3xl font-bold mb-10 text-center">Summarize Document</h1>
             <div>
                 {user ?
                     <FileUpload/> : <div></div>}
