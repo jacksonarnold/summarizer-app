@@ -24,7 +24,7 @@ export async function FileUpload() {
                 </span>
             </div>
             <div className="mt-2">
-                <input style={{display: 'none'}}
+                <input className="hidden"
                        id="file_input" type="file"
                        ref={hiddenFileInput}
                 />
