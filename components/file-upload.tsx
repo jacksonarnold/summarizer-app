@@ -2,7 +2,7 @@
 import {Button} from "@nextui-org/button";
 import React, {useRef} from "react";
 
-export async function FileUpload() {
+export function FileUpload() {
     const hiddenFileInput = useRef<HTMLInputElement>(null);
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
