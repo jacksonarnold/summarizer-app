@@ -1,13 +1,13 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, getIdToken } from "firebase/auth";
+import { FirebaseOptions, initializeApp } from "firebase/app";
+import { Auth, getAuth, getIdToken } from "firebase/auth";
 import { getInstallations, getToken } from "firebase/installations";
 
 // this is set during install
-let firebaseConfig;
+let firebaseConfig: FirebaseOptions;
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", (event: Event) => {
     // extract firebase config from query string
-    const serializedFirebaseConfig = new URL(location).searchParams.get(
+    const serializedFirebaseConfig = new URL(location.href).searchParams.get(
         "firebaseConfig"
     );
 
@@ -24,13 +24,14 @@ self.addEventListener("install", (event) => {
     );
 });
 
-self.addEventListener("fetch", (event) => {
-    const { origin } = new URL(event.request.url);
-    if (origin !== self.location.origin) return;
-    event.respondWith(fetchWithFirebaseHeaders(event.request));
+self.addEventListener("fetch", (event: Event) => {
+    console.log("fetch event", event);
+    // const { origin } = new URL(event.request.url);
+    // if (origin !== self.location.origin) return;
+    // event.respondWith(fetchWithFirebaseHeaders(event.request));
 });
 
-async function fetchWithFirebaseHeaders(request) {
+async function fetchWithFirebaseHeaders(request: Request) {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const installations = getInstallations(app);
@@ -45,7 +46,7 @@ async function fetchWithFirebaseHeaders(request) {
     return await fetch(newRequest);
 }
 
-async function getAuthIdToken(auth) {
+async function getAuthIdToken(auth: Auth) {
     await auth.authStateReady();
     if (!auth.currentUser) return;
     return await getIdToken(auth.currentUser);
