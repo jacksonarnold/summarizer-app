@@ -18,7 +18,7 @@ export function FileUpload() {
 
     return (
         <div className="flex-col items-center justify-center text-center">
-            <div className=" space-y-2 mb-4">
+            <div className="space-y-2 mb-4">
                 <span className="text-gray-500 md:mx-auto dark:text-gray-400">
                     Upload a file to generate a summary of its contents.
                 </span>

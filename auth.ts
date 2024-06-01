@@ -11,12 +11,32 @@ export const {
     providers: [GitHub, Google],
     callbacks:
         {
-            async jwt({ token, account }) {
-                // Persist the OAuth access_token and or the user id to the token right after sign in
-                if (account) {
-                    token.accessToken = account.access_token
+            jwt({ token, trigger, session, account }) {
+                if (trigger === "update") token.name = session.user.name
+                if (account?.provider === "keycloak") {
+                    return { ...token, accessToken: account.access_token }
                 }
+
+                console.log('Token: ', token);
                 return token
-            }
+            },
+            async session({ session, token }) {
+                if (token?.accessToken) {
+                    session.accessToken = token.accessToken as string;
+                }
+                return session
+            },
         }
 });
+
+declare module "next-auth" {
+    interface Session {
+        accessToken?: string
+    }
+}
+
+declare module "@auth/core" {
+    interface JWT {
+        accessToken?: string
+    }
+}
