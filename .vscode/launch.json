@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Program",
+        "runtimeExecutable": "npm", // Use 'npm' instead of 'node'
+        "runtimeArgs": ["run", "dev"], // Run the 'dev' script
+        "skipFiles": [
+          "<node_internals>/**" // Skip node internal files
+        ]
+      }
+    ]
+  }
