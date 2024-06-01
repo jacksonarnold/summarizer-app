@@ -15,7 +15,6 @@ import { firebaseConfig } from "@/lib/firebase/config";
 import { onAuthStateChanged } from "@/lib/firebase/auth";
 
 function useUserSession(initialUser: any) {
-    console.log("initialUser", initialUser);
     // The initialUser comes from the server via a server component
     const [user, setUser] = useState(initialUser);
     const router = useRouter();
@@ -23,9 +22,7 @@ function useUserSession(initialUser: any) {
     // Register the service worker that sends auth state back to server
     // The service worker is built with npm run build-service-worker
     useEffect(() => {
-        console.log("useEffect");
         if ("serviceWorker" in navigator) {
-            console.log("registering service worker");
             const serializedFirebaseConfig = encodeURIComponent(
                 JSON.stringify(firebaseConfig)
             );
