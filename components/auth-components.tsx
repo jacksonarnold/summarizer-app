@@ -1,29 +1,33 @@
-import {signIn, signOut} from "@/auth";
-import {Button} from "@nextui-org/button";
+import { Button } from "@nextui-org/button";
 import React from "react";
+import { signInWithGoogle, signOut } from "@/lib/firebase/auth";
 
 export function SignIn() {
+    function handleClick() {signInWithGoogle().then(r => console.log('sign in'));}
+
     return (
-        <form
-            action={async () => {
-                "use server";
-                await signIn("google", {callbackUrl: "/hello"});
-            }}
+        <Button type="submit" color="primary" variant="flat" onClick={handleClick}
         >
-            <Button type="submit" color="primary" variant="flat">Sign In</Button>
-        </form>
+            Sign In
+        </Button>
     );
 }
 
 export function SignOut() {
+
+    function handleClick() {
+        signOut().then(r => console.log('sign out'));
+    }
+
     return (
-        <form
-            action={async () => {
-                "use server";
-                await signOut();
-            }}
+        <Button
+            type="submit"
+            color="default"
+            variant="ghost"
+            className="border-0 shadow-none"
+            onClick={handleClick}
         >
-            <Button type="submit" color="default" variant="ghost" className="border-0 shadow-none">Sign out</Button>
-        </form>
+            Sign out
+        </Button>
     );
 }
