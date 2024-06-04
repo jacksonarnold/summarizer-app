@@ -1,19 +1,14 @@
 "use server";
-import { auth } from "@/auth";
 import React from "react";
 import { FileUpload } from "@/components/file-upload";
 import { getUser } from "@/lib/mongo";
 
 export default async function Page() {
-    let session = await auth();
-    let userEmail = session?.user?.email ?? "";
-    let accessToken = session?.accessToken;
-
     // add this below
     // let response = await fetch("http://localhost:8000/test");
     // let data = await response.json();
 
-    let user = await getUser(userEmail);
+    let user = await getUser("");
 
     return (
         <section>
