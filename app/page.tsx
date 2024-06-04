@@ -10,9 +10,8 @@ export default async function Page() {
     let accessToken = session?.accessToken;
 
     // add this below
-    let response = await fetch("http://localhost:8000/test");
-
-    let data = await response.json();
+    // let response = await fetch("http://localhost:8000/test");
+    // let data = await response.json();
 
     let user = await getUser(userEmail);
 
