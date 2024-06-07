@@ -1,9 +1,13 @@
 "use client";
 import {Button} from "@nextui-org/button";
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
+import {RemoteRunnable} from "@langchain/core/runnables/remote";
+import {IterableReadableStream} from "@/node_modules/@langchain/core/dist/utils/stream";
 
 export function FileUpload() {
+    const [data, setData] = useState<string[]>([]);
     const hiddenFileInput = useRef<HTMLInputElement>(null);
+
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (!e.target.files) return;
@@ -15,6 +19,27 @@ export function FileUpload() {
             hiddenFileInput.current.click();
         }
     }
+
+    async function streamResponse() {
+        setData([]);
+        const chain = new RemoteRunnable({
+            url: `http://localhost:8000/openai/`,
+        });
+
+        const logStream: IterableReadableStream<any> = await chain.stream({
+            "text": "Who are the South Carolina Gamecocks?",
+            "messages": []
+        });
+
+        for await (const chunk of logStream) {
+            try {
+                setData((prev) => [...prev, chunk.content]);
+            } catch (e: any) {
+                console.warn('Stream Error: ', e);
+            }
+        }
+    }
+
 
     return (
         <div className="flex-col items-center justify-center text-center">
@@ -30,9 +55,12 @@ export function FileUpload() {
                 />
                 <Button onClick={handleClick}>Upload File</Button>
             </div>
-            <Button className="mt-10" color="primary">
+            <Button onClick={streamResponse} className="mt-10" color="primary">
                 Generate Summary
             </Button>
+            <div className="mt-5 w-1/2 mx-auto">
+                <p>{data.join('')}</p>
+            </div>
         </div>
     );
 }
