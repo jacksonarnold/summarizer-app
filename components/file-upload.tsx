@@ -23,17 +23,16 @@ export function FileUpload() {
     async function streamResponse() {
         setData([]);
         const chain = new RemoteRunnable({
-            url: `http://localhost:8000/openai/`,
+            url: `http://localhost:8000/test-chain/`,
         });
 
         const logStream: IterableReadableStream<any> = await chain.stream({
-            "text": "Who are the South Carolina Gamecocks?",
-            "messages": []
+            "topic": "football"
         });
 
         for await (const chunk of logStream) {
             try {
-                setData((prev) => [...prev, chunk.content]);
+                setData((prev) => [...prev, chunk]);
             } catch (e: any) {
                 console.warn('Stream Error: ', e);
             }
