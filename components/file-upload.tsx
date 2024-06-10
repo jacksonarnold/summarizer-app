@@ -23,7 +23,7 @@ export function FileUpload() {
     async function streamResponse() {
         setData([]);
         const chain = new RemoteRunnable({
-            url: `http://localhost:8000/test-chain/`,
+            url: `http://localhost:8000/tell-joke/`,
         });
 
         const logStream: IterableReadableStream<any> = await chain.stream({
