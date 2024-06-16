@@ -7,11 +7,14 @@ import {IterableReadableStream} from "@/node_modules/@langchain/core/dist/utils/
 export function FileUpload() {
     const [data, setData] = useState<string[]>([]);
     const hiddenFileInput = useRef<HTMLInputElement>(null);
-
+    const [fileName, setFileName] = useState<string>("");
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        if (!e.target.files) return;
+        if (!e.target.files || e.target.files.length === 0) return;
         console.log(e.target.files);
+
+        const file = e.target.files[0];
+        setFileName(file.name);
     }
 
     function handleClick() {
@@ -20,14 +23,48 @@ export function FileUpload() {
         }
     }
 
-    async function streamResponse() {
+    function convertPdfToBase64() {
+        return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+            if (!hiddenFileInput.current || !hiddenFileInput.current.files
+                || hiddenFileInput.current.files.length == 0) {
+                console.log('No file uploaded');
+                reject('No file uploaded');
+                return;
+            }
+
+            const uploadedFile: File = hiddenFileInput.current.files[0];
+
+            // Using FileReader to convert the uploaded file to base64
+            const reader = new FileReader();
+
+            reader.readAsDataURL(uploadedFile);
+
+            reader.onloadend = function() {
+                if (reader.result) {
+                    let base64String: string = reader.result.toString();
+                    // Split the string and pick up the base64 data part
+                    let encodedFile = base64String.split(',')[1];
+                    resolve(encodedFile);
+                }
+                else {
+                    reject('Error while reading file');
+                }
+            }
+        });
+    }
+
+    async function uploadFile() {
+        let fileData = await convertPdfToBase64();
+        console.log('File uploaded', fileData);
         setData([]);
+
         const chain = new RemoteRunnable({
-            url: `http://localhost:8000/tell-joke/`,
+            url: `http://localhost:8000/mapreduce/`,
         });
 
         const logStream: IterableReadableStream<any> = await chain.stream({
-            "topic": "football"
+            "file": fileData,
+            "prompt": "Confidential information"
         });
 
         for await (const chunk of logStream) {
@@ -47,14 +84,18 @@ export function FileUpload() {
                     Upload a file to generate a summary of its contents.
                 </span>
             </div>
-            <div className="mt-2">
+            <div className="mt-10">
                 <input className="hidden"
                        id="file_input" type="file"
                        ref={hiddenFileInput}
+                       onChange={handleFileChange}
                 />
+                <div className="my-2">
+                    <label>{fileName}</label>
+                </div>
                 <Button onClick={handleClick}>Upload File</Button>
             </div>
-            <Button onClick={streamResponse} className="mt-10" color="primary">
+            <Button onClick={uploadFile} className="mt-10" color="primary">
                 Generate Summary
             </Button>
             <div className="mt-5 w-1/2 mx-auto">
