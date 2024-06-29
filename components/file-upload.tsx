@@ -55,22 +55,42 @@ export function FileUpload() {
 
     async function uploadFile() {
         let fileData = await convertPdfToBase64();
-        console.log('File uploaded', fileData);
         setData([]);
 
         const chain = new RemoteRunnable({
-            url: `http://localhost:8000/mapreduce/`,
+            url: `http://localhost:8000/retrieval_agent/`,
         });
 
-        const logStream: IterableReadableStream<any> = await chain.stream({
+        let input = {
             "file": fileData,
-            "prompt": "Confidential information"
+            "prompt": "What people are mentioned in the provided documents?"
+        }
+
+        const response: any = await chain.invoke(input);
+        setData([response.answer]);
+    }
+
+
+    async function generateStream() {
+        let fileData = await convertPdfToBase64();
+        setData([]);
+
+        const chain = new RemoteRunnable({
+            url: `http://localhost:8000/retrieval_agent/`,
         });
+
+        let input = {
+            "file": fileData,
+            "prompt": "What people are mentioned in the provided documents?"
+        }
+
+        const logStream: IterableReadableStream<any> = await chain.stream(input);
 
         for await (const chunk of logStream) {
             try {
                 setData((prev) => [...prev, chunk]);
-            } catch (e: any) {
+            }
+            catch (e: any) {
                 console.warn('Stream Error: ', e);
             }
         }
@@ -95,9 +115,16 @@ export function FileUpload() {
                 </div>
                 <Button onClick={handleClick}>Upload File</Button>
             </div>
-            <Button onClick={uploadFile} className="mt-10" color="primary">
-                Generate Summary
-            </Button>
+            <div>
+                <Button onClick={uploadFile} className="mt-10" color="primary">
+                    Generate Summary
+                </Button>
+            </div>
+            <div>
+                <Button onClick={generateStream} className="mt-10" color="secondary">
+                    Generate Stream
+                </Button>
+            </div>
             <div className="mt-5 w-1/2 mx-auto">
                 <p>{data.join('')}</p>
             </div>
