@@ -3,6 +3,7 @@ import {Button} from "@nextui-org/button";
 import React, {useRef, useState} from "react";
 import {RemoteRunnable} from "@langchain/core/runnables/remote";
 import {IterableReadableStream} from "@/node_modules/@langchain/core/dist/utils/stream";
+import {AIMessageChunk} from "@langchain/core/messages";
 
 export function FileUpload() {
     const [data, setData] = useState<string[]>([]);
@@ -62,8 +63,8 @@ export function FileUpload() {
         });
 
         let input = {
-            "file": fileData,
-            "prompt": "What people are mentioned in the provided documents?"
+            "pdf_source": fileData,
+            "query": "What people are mentioned in the provided documents?"
         }
 
         const response: any = await chain.invoke(input);
@@ -76,19 +77,20 @@ export function FileUpload() {
         setData([]);
 
         const chain = new RemoteRunnable({
-            url: `http://localhost:8000/retrieval_agent/`,
+            url: `http://localhost:8000/pdf_qa/`,
         });
 
         let input = {
-            "file": fileData,
-            "prompt": "What people are mentioned in the provided documents?"
+            "pdf_source": fileData,
+            "query": "What people are mentioned in the provided documents?"
         }
 
-        const logStream: IterableReadableStream<any> = await chain.stream(input);
+        const logStream: IterableReadableStream<AIMessageChunk>
+            = await chain.stream(input) as IterableReadableStream<AIMessageChunk>;
 
         for await (const chunk of logStream) {
             try {
-                setData((prev) => [...prev, chunk]);
+                setData((prev) => [...prev, chunk.content.toString()]);
             }
             catch (e: any) {
                 console.warn('Stream Error: ', e);
