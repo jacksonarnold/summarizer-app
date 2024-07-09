@@ -28,7 +28,6 @@ export function FileUpload() {
         return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
             if (!hiddenFileInput.current || !hiddenFileInput.current.files
                 || hiddenFileInput.current.files.length == 0) {
-                console.log('No file uploaded');
                 reject('No file uploaded');
                 return;
             }
