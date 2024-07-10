@@ -19,7 +19,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <body className={inter.className}>
         <Providers>
             <Header/>
-            <main className="flex flex-col items-center justify-center min-h-screen py-12 space-y-2 px-4">
+            <main className="items-center justify-center min-h-screen py-12 space-y-2 px-4">
                 {children}
             </main>
         </Providers>
