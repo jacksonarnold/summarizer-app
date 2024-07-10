@@ -7,7 +7,7 @@ export function SignIn() {
         <form
             action={async () => {
                 "use server";
-                await signIn("google", {callbackUrl: "/middleware-example"});
+                await signIn("google", {callbackUrl: "/hello"});
             }}
         >
             <Button type="submit" color="primary" variant="flat">Sign In</Button>
