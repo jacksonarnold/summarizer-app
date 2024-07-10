@@ -9,8 +9,6 @@ export default async function Header() {
     let userEmail = session?.user?.email;
     const profileImageUrl = session?.user?.image;
 
-    const isActiveItem = false;
-
     return (
         <Navbar>
             <NavbarBrand>
@@ -18,19 +16,19 @@ export default async function Header() {
                 <p className="font-bold text-inherit">ASSISTANT</p>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-10" justify="center">
-                <NavbarItem isActive={true}>
+                <NavbarItem>
                     <Link color="foreground" href="/waitlist">
                         Waitlist
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive={false}>
+                <NavbarItem isActive>
                     <Link href="/" aria-current="page">
                         Summarize
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link color="foreground" href="#">
-                        Contact
+                        Chat
                     </Link>
                 </NavbarItem>
             </NavbarContent>

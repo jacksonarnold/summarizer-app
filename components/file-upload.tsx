@@ -48,7 +48,7 @@ export function FileUpload() {
         setDocument(file);
     }
 
-    async function testCors() {
+    async function tellJoke() {
 
         let chain = new RemoteRunnable({
             url: `http://localhost:8000/tell-joke/`
@@ -74,7 +74,7 @@ export function FileUpload() {
 
         let input = {
             "pdf_source": fileData,
-            "query": "What people are mentioned in the provided documents?"
+            "query": "What are the main skills listed in the provided resume?"
         }
 
         const response: any = await chain.invoke(input);
@@ -94,7 +94,7 @@ export function FileUpload() {
 
         let input = {
             "pdf_source": fileData,
-            "query": "What people are mentioned in the provided documents?"
+            "query": "Where did this candidate work last (location and company) according to the provided resume?"
         }
 
         const logStream: IterableReadableStream<AIMessageChunk>
