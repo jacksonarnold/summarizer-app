@@ -1,10 +1,11 @@
 "use client";
-import {Button} from "@nextui-org/button";
-import React, {useState} from "react";
-import {RemoteRunnable} from "@langchain/core/runnables/remote";
-import {IterableReadableStream} from "@/node_modules/@langchain/core/dist/utils/stream";
-import {AIMessageChunk} from "@langchain/core/messages";
-import {FileIcon, UploadIcon, XIcon} from "lucide-react";
+import { Button } from "@nextui-org/button";
+import React, { useState } from "react";
+import { RemoteRunnable } from "@langchain/core/runnables/remote";
+import { IterableReadableStream } from "@/node_modules/@langchain/core/dist/utils/stream";
+import { AIMessageChunk } from "@langchain/core/messages";
+import { FileIcon, UploadIcon, XIcon } from "lucide-react";
+import LogoutButton from "@/components/LogoutButton";
 
 export function FileUpload() {
     const [document, setDocument] = useState<File | null>(null)
@@ -25,7 +26,7 @@ export function FileUpload() {
 
             reader.readAsDataURL(document);
 
-            reader.onloadend = function() {
+            reader.onloadend = function () {
                 if (reader.result) {
                     let base64String: string = reader.result.toString();
                     // Split the string and pick up the base64 data part
@@ -116,9 +117,13 @@ export function FileUpload() {
     return (
         <div className="flex flex-col items-center justify-center bg-background">
             <div className="w-full max-w-2xl p-6 bg-card rounded-lg shadow-lg">
-                <h1 className="text-3xl font-bold mb-4 text-center">
-                    Summarize PDF
-                </h1>
+                <div className="flex flex-row justify-between">
+                    <h1 className="text-3xl font-bold mb-4 text-center">
+                        Summarize PDF
+                    </h1>
+                    <LogoutButton />
+                </div>
+
                 <div className="mb-6">
                     <label htmlFor="document" className="block mb-2 text-muted-foreground">
                         Upload a document:
@@ -128,7 +133,7 @@ export function FileUpload() {
                             <div
                                 className="flex items-center justify-between w-full bg-muted/20 rounded-lg p-4">
                                 <div className="flex items-center gap-4">
-                                    <FileIcon className="w-6 h-6 text-muted-foreground"/>
+                                    <FileIcon className="w-6 h-6 text-muted-foreground" />
                                     <div>
                                         <p className="font-medium text-muted-foreground">{document.name}</p>
                                         <p className="text-xs text-muted-foreground">{(document.size / 1024 / 1024).toFixed(2)} MB</p>
@@ -139,7 +144,7 @@ export function FileUpload() {
                                     onClick={() => setDocument(null)}
                                     className="text-muted-foreground hover:bg-muted/30"
                                 >
-                                    <XIcon className="w-5 h-5"/>
+                                    <XIcon className="w-5 h-5" />
                                 </Button>
                             </div>
                         ) : (
@@ -148,7 +153,7 @@ export function FileUpload() {
                                 className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-muted/20 hover:bg-muted/30"
                             >
                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <UploadIcon className="w-10 h-10 mb-3 text-muted-foreground"/>
+                                    <UploadIcon className="w-10 h-10 mb-3 text-muted-foreground" />
                                     <p className="mb-2 text-sm text-muted-foreground">
                                         <span className="font-semibold">Click to upload</span> or drag and drop
                                     </p>
@@ -170,14 +175,14 @@ export function FileUpload() {
                         className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-1 focus:ring-primary"
                         disabled={!document}
                     >
-                        {isLoadingSummary ? <div className="w-5 h-5 text-primary-foreground"/> : "Generate Summary"}
+                        {isLoadingSummary ? <div className="w-5 h-5 text-primary-foreground" /> : "Generate Summary"}
                     </Button>
                     <Button
                         onClick={streamSummary}
                         className="bg-secondary text-secondary-foreground hover:bg-secondary/90 focus:ring-1 focus:ring-secondary"
                         disabled={!document}
                     >
-                        {isLoadingStream ? <div className="w-5 h-5 text-primary-foreground"/> : "Stream Summary"}
+                        {isLoadingStream ? <div className="w-5 h-5 text-primary-foreground" /> : "Stream Summary"}
                     </Button>
                 </div>
                 {summary.length > 0 && (
